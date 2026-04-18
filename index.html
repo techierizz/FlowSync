@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>FlowSync</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <h1>FlowSync</h1>
+        <p>Live Crowd Simulation</p>
+    </header>
+
+    <div class="container">
+
+        <div class="panel left">
+            <h2>Zones</h2>
+            <div id="zones"></div>
+        </div>
+
+        <div class="panel center">
+            <h2>Venue Map</h2>
+            <div id="map"></div>
+
+            <div class="buttons">
+                <button onclick="simulateStart()">Match Start</button>
+                <button onclick="simulateHalftime()">Halftime Rush</button>
+                <button onclick="simulateEnd()">Match End</button>
+            </div>
+        </div>
+
+        <div class="panel right">
+            <h2>AI Decisions</h2>
+            <div id="decisions"></div>
+        </div>
+
+    </div>
+
+    <script src="data/mockData.js"></script>
+    <script src="engine/crowd.js"></script>
+    <script src="engine/prediction.js"></script>
+    <script src="engine/routing.js"></script>
+    <script src="engine/coordination.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

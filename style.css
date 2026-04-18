@@ -1,0 +1,66 @@
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #0f172a;
+    color: white;
+}
+
+header {
+    text-align: center;
+    padding: 10px;
+    background: #1e293b;
+}
+
+.container {
+    display: flex;
+    height: 90vh;
+}
+
+.panel {
+    padding: 10px;
+}
+
+.left,
+.right {
+    width: 25%;
+    background: #1e293b;
+}
+
+.center {
+    width: 50%;
+    text-align: center;
+}
+
+.zone {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.low {
+    background: green;
+}
+
+.medium {
+    background: orange;
+}
+
+.high {
+    background: red;
+}
+
+#map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.box {
+    padding: 20px;
+    border: 1px solid white;
+}
+
+.buttons button {
+    margin: 5px;
+    padding: 8px;
+}
