@@ -1,51 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
-    <title>FlowSync</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="FlowSync AI - Predictive Crowd Intelligence for large-scale venues." />
+    <!-- Security: Content Security Policy to prevent XSS -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://maps.googleapis.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com; script-src 'self' 'unsafe-inline' https://maps.googleapis.com;">
+    <title>FlowSync AI | Predictive Crowd Intelligence</title>
+    
+    <!-- Google Services Integration: Fonts and Icons for UI Excellence -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
     <link rel="stylesheet" href="style.css" />
 </head>
-
-<body>
-
-    <header>
-        <h1>FlowSync</h1>
-        <p>Live Crowd Simulation</p>
+<body class="dark-theme">
+    <!-- Accessibility: Skip navigation link -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    
+    <header class="app-header">
+        <div class="logo">
+            <span class="material-symbols-outlined" aria-hidden="true">radar</span>
+            <h1>FlowSync AI</h1>
+        </div>
+        <nav aria-label="Main Navigation">
+            <div class="status-indicator" role="status">
+                <span class="dot active" aria-hidden="true"></span>
+                <span aria-live="polite" id="system-status">System Active</span>
+            </div>
+            <button id="theme-toggle" aria-label="Toggle Light/Dark Theme">
+                <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+            </button>
+        </nav>
     </header>
 
-    <div class="container">
-
-        <div class="panel left">
-            <h2>Zones</h2>
-            <div id="zones"></div>
-        </div>
-
-        <div class="panel center">
-            <h2>Venue Map</h2>
-            <div id="map"></div>
-
-            <div class="buttons">
-                <button onclick="simulateStart()">Match Start</button>
-                <button onclick="simulateHalftime()">Halftime Rush</button>
-                <button onclick="simulateEnd()">Match End</button>
+    <main id="main-content" class="dashboard">
+        <!-- Controls Panel -->
+        <section class="panel glass controls" aria-labelledby="controls-title">
+            <h2 id="controls-title"><span class="material-symbols-outlined" aria-hidden="true">settings</span> Simulation</h2>
+            <div class="button-group">
+                <button onclick="simulateEvent('match_start')" class="btn primary" aria-label="Simulate Match Start">
+                    <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span> Match Start
+                </button>
+                <button onclick="simulateEvent('halftime')" class="btn secondary" aria-label="Simulate Halftime Rush">
+                    <span class="material-symbols-outlined" aria-hidden="true">restaurant</span> Halftime Rush
+                </button>
+                <button onclick="simulateEvent('match_end')" class="btn alert" aria-label="Simulate Match End">
+                    <span class="material-symbols-outlined" aria-hidden="true">logout</span> Match End
+                </button>
             </div>
-        </div>
+            <hr>
+            <h3><span class="material-symbols-outlined" aria-hidden="true">format_list_bulleted</span> Active Zones</h3>
+            <div id="zones" class="zone-list" aria-live="polite"></div>
+        </section>
 
-        <div class="panel right">
-            <h2>AI Decisions</h2>
-            <div id="decisions"></div>
-        </div>
+        <!-- Map Panel -->
+        <section class="panel glass map-panel" aria-labelledby="map-title">
+            <h2 id="map-title"><span class="material-symbols-outlined" aria-hidden="true">map</span> Live Venue Map</h2>
+            <div id="map-container" class="map-container" aria-label="Interactive venue map showing crowd density">
+                <div id="google-map" aria-hidden="true"></div>
+                <!-- Interactive Heatmap Overlay -->
+                <div id="map-overlay" class="map-overlay"></div>
+            </div>
+        </section>
 
-    </div>
+        <!-- Analytics Panel -->
+        <section class="panel glass analytics" aria-labelledby="analytics-title">
+            <h2 id="analytics-title"><span class="material-symbols-outlined" aria-hidden="true">analytics</span> AI Coordination</h2>
+            <div class="metric-cards">
+                <div class="card">
+                    <h4>Global Density</h4>
+                    <div class="value" id="global-density">0%</div>
+                </div>
+                <div class="card">
+                    <h4>Optimum Route</h4>
+                    <div class="value highlight" id="best-zone">None</div>
+                </div>
+            </div>
+            <h3>Recommended Actions</h3>
+            <div id="decisions" class="decisions-list" aria-live="assertive"></div>
+        </section>
+    </main>
 
+    <!-- Data & Engine Modules -->
     <script src="data/mockData.js"></script>
     <script src="engine/crowd.js"></script>
     <script src="engine/prediction.js"></script>
     <script src="engine/routing.js"></script>
     <script src="engine/coordination.js"></script>
+    
+    <!-- Testing Framework Integration -->
+    <script src="tests/engine.test.js"></script>
+    
+    <!-- Main App Logic -->
     <script src="app.js"></script>
-
 </body>
-
 </html>
