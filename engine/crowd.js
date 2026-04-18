@@ -9,8 +9,11 @@ function updateZones() {
         // Natural crowd variance (stochastic factor)
         let variance = (Math.random() * 8 - 4);
         
-        // EMA formulation for density based on current state + inflow
-        let newDensity = z.density + variance + (z.inflow * 0.4);
+        // Natural egress (people leaving the zone, finishing meals, exiting)
+        let egress = z.density * 0.06; // 6% natural clear rate per tick
+        
+        // EMA formulation for density based on current state + inflow - egress
+        let newDensity = z.density + variance + (z.inflow * 0.5) - egress;
         z.density = Math.max(0, Math.min(100, newDensity));
         
         // Update inflow realistically (brownian walk)
