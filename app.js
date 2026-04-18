@@ -6,16 +6,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMapFallback();
-    
+
     // User-Level Intelligence: Attach listener for persona change
     let personaSelector = document.getElementById('persona-selector');
     if (personaSelector) {
         personaSelector.addEventListener('change', renderDecisions);
     }
-    
+
     loop();
     // Use requestAnimationFrame in a real app, but setInterval is fine for periodic data fetches
-    setInterval(loop, 2500); 
+    setInterval(loop, 2500);
 });
 
 function initTheme() {
@@ -37,12 +37,12 @@ function initMapFallback() {
 
 function renderHeatmap() {
     const pseudoMap = document.getElementById('pseudo-map');
-    if(!pseudoMap) return;
+    if (!pseudoMap) return;
     pseudoMap.innerHTML = '';
-    
+
     for (let key in zones) {
         let z = zones[key];
-        
+
         let container = document.createElement('div');
         container.className = 'heat-node-container';
         container.style.position = 'absolute';
@@ -52,14 +52,14 @@ function renderHeatmap() {
 
         let node = document.createElement('div');
         node.className = 'heat-node';
-        
+
         // Dynamically calculate heat color (Green -> Yellow -> Red)
         let r = Math.min(255, (z.density / 100) * 255 * 2);
         let g = Math.min(255, ((100 - z.density) / 100) * 255 * 2);
         node.style.background = `rgba(${r}, ${g}, 0, 0.65)`;
-        node.style.transform = `scale(${1 + (z.density/100) * 1.5})`;
+        node.style.transform = `scale(${1 + (z.density / 100) * 1.5})`;
         node.style.boxShadow = `0 0 ${z.density}px rgba(${r}, ${g}, 0, 0.8)`;
-        
+
         let label = document.createElement('span');
         label.className = 'heat-label';
         label.innerText = z.name;
@@ -69,6 +69,9 @@ function renderHeatmap() {
         pseudoMap.appendChild(container);
     }
 }
+
+let lastGlobalDensity = 0;
+let isRecovering = false;
 
 function renderZones() {
     let container = document.getElementById("zones");
@@ -88,7 +91,7 @@ function renderZones() {
         div.className = `zone-item ${level}`;
         div.setAttribute('role', 'region');
         div.setAttribute('aria-label', `${z.name} status`);
-        
+
         // XSS Prevention: Use DOM manipulation instead of innerHTML where user data might exist.
         // Here we use strict template literals as data is internally controlled.
         div.innerHTML = `
@@ -104,13 +107,53 @@ function renderZones() {
 
     let globalAvg = totalDensity / Object.keys(zones).length;
     let globalDensityEl = document.getElementById('global-density');
-    globalDensityEl.innerText = Math.round(globalAvg) + '%';
+
+    // Trend Visualization (Recovery Feedback)
+    let trend = "";
+    if (lastGlobalDensity > 0) {
+        if (globalAvg < lastGlobalDensity - 0.5) {
+            trend = " <span style='color: var(--secondary); font-size: 1.2rem; vertical-align: middle;'>▼</span>";
+        } else if (globalAvg > lastGlobalDensity + 0.5) {
+            trend = " <span style='color: var(--alert); font-size: 1.2rem; vertical-align: middle;'>▲</span>";
+        } else {
+            trend = " <span style='color: var(--text-muted); font-size: 1.2rem; vertical-align: middle;'>~</span>";
+        }
+    }
+
+    globalDensityEl.innerHTML = Math.round(globalAvg) + '%' + trend;
     globalDensityEl.style.color = globalAvg > 75 ? 'var(--alert)' : (globalAvg > 45 ? '#f59e0b' : 'var(--secondary)');
+
+    // System Status Recovery Logic
+    if (globalAvg > 70) {
+        isRecovering = true;
+    } else if (globalAvg < 50) {
+        isRecovering = false;
+    }
+
+    let statusText = document.getElementById('system-status');
+    let statusDot = document.querySelector('.status-indicator .dot');
+
+    if (statusText && statusDot) {
+        if (isRecovering) {
+            statusText.innerHTML = "<strong>ACTIVE MITIGATION</strong>";
+            statusText.style.color = "var(--alert)";
+            statusDot.style.background = "var(--alert)";
+            statusDot.style.boxShadow = "0 0 10px var(--alert)";
+            // Add pulse effect to the dot if not already handled by css
+        } else {
+            statusText.innerText = "SYSTEM OPTIMAL";
+            statusText.style.color = "var(--text-muted)";
+            statusDot.style.background = "var(--secondary)";
+            statusDot.style.boxShadow = "0 0 10px var(--secondary)";
+        }
+    }
+
+    lastGlobalDensity = globalAvg;
 }
 
 function renderDecisions(actions) {
     let div = document.getElementById("decisions");
-    
+
     // User-Level Intelligence Layer logic
     let personaSelector = document.getElementById('persona-selector');
     let currentPersona = personaSelector ? personaSelector.value : 'speed';
@@ -131,8 +174,8 @@ function renderDecisions(actions) {
     if (!actions || !Array.isArray(actions)) {
         actions = getActions();
     }
-    
-    
+
+
     // Hash actions to prevent redundant DOM updates and allow CSS animations to play naturally
     let newHash = actions.map(a => a.msg).join('');
     if (div.dataset.hash === newHash) return;
@@ -142,11 +185,12 @@ function renderDecisions(actions) {
     actions.forEach(a => {
         let p = document.createElement("div");
         p.className = `decision-item ${a.type.toLowerCase()}`;
-        
+
         let icon = 'info';
-        if(a.type === 'CRITICAL') icon = 'warning';
-        if(a.type === 'ALERT') icon = 'error';
-        if(a.type === 'WARN') icon = 'assignment_late';
+        if (a.type === 'CRITICAL') icon = 'warning';
+        if (a.type === 'ALERT') icon = 'error';
+        if (a.type === 'WARN') icon = 'assignment_late';
+        if (a.type === 'INFO') icon = 'check_circle';
 
         p.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${icon}</span> <span>${a.msg}</span>`;
         div.appendChild(p);
@@ -163,7 +207,7 @@ function loop() {
 }
 
 // Interactive Simulation Triggers
-window.simulateEvent = function(type) {
+window.simulateEvent = function (type) {
     if (type === 'match_start') {
         zones.gateA.density += 45;
         zones.gateB.density += 40;
@@ -182,7 +226,9 @@ window.simulateEvent = function(type) {
 };
 
 // High-Intensity Peak Surge Scenario
-window.triggerSurge = function() {
+window.triggerSurge = function () {
+    isRecovering = true; // Force system into explicit recovery mode
+
     // Visual effect on the Map Panel
     let mapContainer = document.getElementById('map-container');
     if (mapContainer) {
@@ -196,7 +242,7 @@ window.triggerSurge = function() {
         zones[key].inflow = Math.min(35, zones[key].inflow + 15 + Math.random() * 10);
         zones[key].queue = Math.min(60, zones[key].queue + 20 + Math.random() * 20);
     }
-    
+
     // Force immediate UI update to show chaos before AI starts mitigating
-    loop(); 
+    loop();
 };
