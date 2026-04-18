@@ -74,9 +74,17 @@
                     <h4>Global Density</h4>
                     <div class="value" id="global-density">0%</div>
                 </div>
-                <div class="card">
-                    <h4>Optimum Route</h4>
-                    <div class="value highlight" id="best-zone">None</div>
+                <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h4 style="margin: 0;">Optimum Route</h4>
+                        <select id="persona-selector" aria-label="Select User Persona" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; padding: 2px 5px; font-size: 0.75rem; cursor: pointer;">
+                            <option value="speed">Speed-Focused</option>
+                            <option value="comfort">Comfort-Seeking</option>
+                            <option value="accessibility">Accessibility</option>
+                        </select>
+                    </div>
+                    <div class="value highlight" id="best-zone" style="font-size: 1.4rem;">None</div>
+                    <div id="persona-description" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">Prioritizing minimum wait time.</div>
                 </div>
             </div>
             <h3>Recommended Actions</h3>

@@ -6,6 +6,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMapFallback();
+    
+    // User-Level Intelligence: Attach listener for persona change
+    let personaSelector = document.getElementById('persona-selector');
+    if (personaSelector) {
+        personaSelector.addEventListener('change', renderDecisions);
+    }
+    
     loop();
     // Use requestAnimationFrame in a real app, but setInterval is fine for periodic data fetches
     setInterval(loop, 2500); 
@@ -104,7 +111,20 @@ function renderZones() {
 function renderDecisions() {
     let div = document.getElementById("decisions");
     
-    let best = getBestZone();
+    // User-Level Intelligence Layer logic
+    let personaSelector = document.getElementById('persona-selector');
+    let currentPersona = personaSelector ? personaSelector.value : 'speed';
+
+    // Update UI text for persona description
+    let desc = document.getElementById('persona-description');
+    if (desc) {
+        if (currentPersona === 'speed') desc.innerText = "Prioritizing minimum wait time.";
+        else if (currentPersona === 'comfort') desc.innerText = "Prioritizing less crowded areas.";
+        else if (currentPersona === 'accessibility') desc.innerText = "Prioritizing accessible zones.";
+    }
+
+    // Get personalized best route based on user persona
+    let best = getBestZone(currentPersona);
     document.getElementById('best-zone').innerText = best.name;
 
     let actions = getActions();

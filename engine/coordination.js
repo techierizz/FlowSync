@@ -18,7 +18,8 @@ function getActions() {
         let z = zones[key];
 
         if (isCongested(z)) {
-            let alt = getBestZone();
+            // Venue operations should always use the 'speed' (efficiency) metric for reroutes
+            let alt = getBestZone('speed');
             if (alt.name !== z.name) {
                 actions.push({ type: 'ALERT', msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${Math.round(z.density)}%, predicted congestion risk high)` });
             }
