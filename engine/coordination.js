@@ -9,8 +9,8 @@ function getActions() {
     let globalDensity = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / totalZones;
 
     if (globalDensity > 75) {
-        actions.push({ 
-            type: 'CRITICAL', 
+        actions.push({
+            type: 'CRITICAL',
             msg: `Venue at critical capacity (${Math.round(globalDensity)}%). Deploying overflow protocols immediately.`,
             actionType: 'OVERFLOW'
         });
@@ -27,8 +27,8 @@ function getActions() {
             let altKey = Object.keys(zones).find(k => zones[k].name === alt.name);
 
             if (alt.name !== z.name) {
-                actions.push({ 
-                    type: 'ALERT', 
+                actions.push({
+                    type: 'ALERT',
                     msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${Math.round(z.density)}%, predicted congestion risk high)`,
                     actionType: 'REROUTE',
                     source: key,
@@ -37,8 +37,8 @@ function getActions() {
             }
         } else if (z.queue > 15) {
             let waitTime = predictTimeInQueue(z);
-            actions.push({ 
-                type: 'WARN', 
+            actions.push({
+                type: 'WARN',
                 msg: `Deploy staff to ${z.name}. Est. wait: ~${waitTime}m.`,
                 actionType: 'STAFF',
                 target: key
@@ -60,22 +60,22 @@ function getActions() {
 function applyFeedbackLoop(actions) {
     actions.forEach(action => {
         if (action.actionType === 'REROUTE' && action.source && action.target) {
-            // Divert flow actively: reduce source density/inflow, smoothly increase target
-            zones[action.source].density = Math.max(0, zones[action.source].density - 4.5);
-            zones[action.source].inflow = Math.max(0, zones[action.source].inflow - 2.5);
-            
-            zones[action.target].density = Math.min(100, zones[action.target].density + 1.5);
+            // Realism Tuning: A physical reroute takes time as crowds walk.
+            zones[action.source].density = Math.max(0, zones[action.source].density - 3.0);
+            zones[action.source].inflow = Math.max(0, zones[action.source].inflow - 1.5);
+
+            zones[action.target].density = Math.min(100, zones[action.target].density + 1.2);
             zones[action.target].inflow += 0.5;
         } else if (action.actionType === 'STAFF' && action.target) {
-            // Deployed staff process the queue rapidly
-            zones[action.target].queue = Math.max(0, zones[action.target].queue - 8);
-            zones[action.target].density = Math.max(0, zones[action.target].density - 3.0);
-            zones[action.target].inflow = Math.max(0, zones[action.target].inflow - 1.5);
+            // Realism Tuning: Staff process queues fast, but are bounded by human scanning/security limits.
+            zones[action.target].queue = Math.max(0, zones[action.target].queue - 5);
+            zones[action.target].density = Math.max(0, zones[action.target].density - 1.5);
+            zones[action.target].inflow = Math.max(0, zones[action.target].inflow - 1.0);
         } else if (action.actionType === 'OVERFLOW') {
-            // System-wide lockdown: throttle all inflows heavily
+            // System-wide lockdown: Gates temporarily restricted, inflow aggressively throttled
             for (let k in zones) {
-                zones[k].inflow = Math.max(0, zones[k].inflow - 4);
-                zones[k].density = Math.max(0, zones[k].density - 2);
+                zones[k].inflow = Math.max(0, zones[k].inflow - 3);
+                zones[k].density = Math.max(0, zones[k].density - 1.5);
             }
         }
     });
