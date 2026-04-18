@@ -108,7 +108,7 @@ function renderZones() {
     globalDensityEl.style.color = globalAvg > 75 ? 'var(--alert)' : (globalAvg > 45 ? '#f59e0b' : 'var(--secondary)');
 }
 
-function renderDecisions() {
+function renderDecisions(actions) {
     let div = document.getElementById("decisions");
     
     // User-Level Intelligence Layer logic
@@ -127,7 +127,11 @@ function renderDecisions() {
     let best = getBestZone(currentPersona);
     document.getElementById('best-zone').innerText = best.name;
 
-    let actions = getActions();
+    // Fallback if triggered by an Event Listener (like persona change) instead of the loop
+    if (!actions || !Array.isArray(actions)) {
+        actions = getActions();
+    }
+    
     
     // Hash actions to prevent redundant DOM updates and allow CSS animations to play naturally
     let newHash = actions.map(a => a.msg).join('');
@@ -151,9 +155,11 @@ function renderDecisions() {
 
 function loop() {
     updateZones();
+    let actions = getActions();
+    applyFeedbackLoop(actions);
     renderZones();
     renderHeatmap();
-    renderDecisions();
+    renderDecisions(actions);
 }
 
 // Interactive Simulation Triggers
