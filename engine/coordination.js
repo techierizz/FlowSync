@@ -20,7 +20,7 @@ function getActions() {
         if (isCongested(z)) {
             let alt = getBestZone();
             if (alt.name !== z.name) {
-                actions.push({ type: 'ALERT', msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${z.density}%, predicted congestion risk high)` });
+                actions.push({ type: 'ALERT', msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${Math.round(z.density)}%, predicted congestion risk high)` });
             }
         } else if (z.queue > 15) {
             let waitTime = predictTimeInQueue(z);
