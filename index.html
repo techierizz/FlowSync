@@ -41,14 +41,19 @@
         <section class="panel glass controls" aria-labelledby="controls-title">
             <h2 id="controls-title"><span class="material-symbols-outlined" aria-hidden="true">settings</span> Simulation</h2>
             <div class="button-group">
-                <button onclick="simulateEvent('match_start')" class="btn primary" aria-label="Simulate Match Start">
-                    <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span> Match Start
-                </button>
-                <button onclick="simulateEvent('halftime')" class="btn secondary" aria-label="Simulate Halftime Rush">
-                    <span class="material-symbols-outlined" aria-hidden="true">restaurant</span> Halftime Rush
-                </button>
-                <button onclick="simulateEvent('match_end')" class="btn alert" aria-label="Simulate Match End">
-                    <span class="material-symbols-outlined" aria-hidden="true">logout</span> Match End
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <button onclick="simulateEvent('match_start')" class="btn primary" aria-label="Simulate Match Start" style="margin: 0; font-size: 0.8rem; padding: 0.5rem;">
+                        <span class="material-symbols-outlined" aria-hidden="true" style="font-size: 1.1rem;">sports_soccer</span> Start
+                    </button>
+                    <button onclick="simulateEvent('halftime')" class="btn secondary" aria-label="Simulate Halftime Rush" style="margin: 0; font-size: 0.8rem; padding: 0.5rem;">
+                        <span class="material-symbols-outlined" aria-hidden="true" style="font-size: 1.1rem;">restaurant</span> Half
+                    </button>
+                    <button onclick="simulateEvent('match_end')" class="btn alert" aria-label="Simulate Match End" style="margin: 0; font-size: 0.8rem; padding: 0.5rem;">
+                        <span class="material-symbols-outlined" aria-hidden="true" style="font-size: 1.1rem;">logout</span> End
+                    </button>
+                </div>
+                <button onclick="triggerSurge()" class="btn surge-btn" aria-label="Trigger Peak Surge Mode" style="margin: 0;">
+                    <span class="material-symbols-outlined" aria-hidden="true">warning</span> PEAK SURGE MODE
                 </button>
             </div>
             <hr>

@@ -233,3 +233,36 @@ button#theme-toggle:hover { background: rgba(255,255,255,0.1); }
     .dashboard { grid-template-columns: 1fr; }
     .map-panel { min-height: 450px; }
 }
+
+/* Surge Mode Styling */
+.surge-btn {
+    background: linear-gradient(45deg, #ef4444, #991b1b);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+    animation: pulse-red 2s infinite;
+}
+.surge-btn:hover {
+    background: linear-gradient(45deg, #dc2626, #7f1d1d);
+    transform: scale(1.02);
+}
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+    100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+}
+
+.surge-active {
+    animation: screen-shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    border: 2px solid #ef4444 !important;
+    box-shadow: inset 0 0 60px rgba(239, 68, 68, 0.4), 0 0 30px rgba(239, 68, 68, 0.5) !important;
+}
+
+@keyframes screen-shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(3px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
+    40%, 60% { transform: translate3d(5px, 0, 0); }
+}

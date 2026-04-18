@@ -180,3 +180,23 @@ window.simulateEvent = function(type) {
     }
     loop(); // Force immediate UI update
 };
+
+// High-Intensity Peak Surge Scenario
+window.triggerSurge = function() {
+    // Visual effect on the Map Panel
+    let mapContainer = document.getElementById('map-container');
+    if (mapContainer) {
+        mapContainer.classList.add('surge-active');
+        setTimeout(() => mapContainer.classList.remove('surge-active'), 600);
+    }
+
+    // Instantly destabilize the venue with extreme mass crowd injection
+    for (let key in zones) {
+        zones[key].density = Math.min(100, zones[key].density + 40 + Math.random() * 30);
+        zones[key].inflow = Math.min(35, zones[key].inflow + 15 + Math.random() * 10);
+        zones[key].queue = Math.min(60, zones[key].queue + 20 + Math.random() * 20);
+    }
+    
+    // Force immediate UI update to show chaos before AI starts mitigating
+    loop(); 
+};
