@@ -4,10 +4,10 @@
  */
 function getActions() {
     let actions = [];
-    
+
     let totalZones = Object.keys(zones).length;
     let globalDensity = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / totalZones;
-    
+
     if (globalDensity > 75) {
         actions.push({ type: 'CRITICAL', msg: `Venue at critical capacity (${Math.round(globalDensity)}%). Deploying overflow protocols immediately.` });
     } else if (globalDensity > 55) {
@@ -20,7 +20,7 @@ function getActions() {
         if (isCongested(z)) {
             let alt = getBestZone();
             if (alt.name !== z.name) {
-                actions.push({ type: 'ALERT', msg: `Reroute traffic from ${z.name} to ${alt.name}. Density critical.` });
+                actions.push({ type: 'ALERT', msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${z.density}%, predicted congestion risk high)` });
             }
         } else if (z.queue > 15) {
             let waitTime = predictTimeInQueue(z);
