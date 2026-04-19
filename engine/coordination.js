@@ -1,3 +1,5 @@
+"use strict";
+
 function getActions() {
     let actions = [];
 

@@ -1,3 +1,5 @@
+"use strict";
+
 function updateZones() {
     for (let key in zones) {
         let z = zones[key];

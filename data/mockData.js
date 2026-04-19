@@ -1,3 +1,5 @@
+"use strict";
+
 let zones = {
     gateA: { name: "North Gate A", density: 30, queue: 10, inflow: 5, x: 20, y: 50, accessibilityScore: 8 },
     gateB: { name: "South Gate B", density: 20, queue: 5, inflow: 3, x: 80, y: 50, accessibilityScore: 5 },

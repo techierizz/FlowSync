@@ -1,3 +1,5 @@
+"use strict";
+
 let densityChart;
 let yAxisChart;
 const maxHistory = 100;

@@ -1,3 +1,5 @@
+"use strict";
+
 function isCongested(zone) {
     let predictiveScore = (zone.density * 0.6) + (zone.inflow * 1.5) + (zone.queue * 0.4);
     return predictiveScore > 65;

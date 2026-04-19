@@ -132,18 +132,18 @@
             <div style="position: relative; height: 250px; width: 100%;">
 
                 <!-- The Scrollable Viewport -->
-                <div id="chart-viewport" class="chart-viewport"
+                <div id="chart-viewport" class="chart-viewport" tabindex="0" aria-label="Scrollable telemetry history"
                     style="width: 100%; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth;">
                     <div id="chart-container" style="height: 100%; width: 3500px; position: relative;">
-                        <canvas id="densityChart"></canvas>
+                        <canvas id="densityChart" role="img" aria-label="Real-time global crowd density graph"></canvas>
                     </div>
                 </div>
 
                 <!-- Fixed Sticky Y-Axis Overlay (Clipping Mask) -->
-                <div
+                <div aria-hidden="true"
                     style="position: absolute; top: 0; left: 0; width: 45px; height: 100%; background: var(--bg-panel); z-index: 10; overflow: hidden; border-right: 1px solid rgba(255,255,255,0.05);">
                     <div style="height: 100%; width: 3500px;">
-                        <canvas id="yAxisChart"></canvas>
+                        <canvas id="yAxisChart" role="presentation"></canvas>
                     </div>
                 </div>
 

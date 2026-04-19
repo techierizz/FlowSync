@@ -1,3 +1,5 @@
+"use strict";
+
 function getBestZone(persona = 'speed') {
     let safeZones = Object.values(zones).filter(z => !isCongested(z));
 

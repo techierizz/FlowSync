@@ -1,3 +1,5 @@
+"use strict";
+
 const firebaseConfig = {
     apiKey: "AIzaSyA5qqN7uL1ErcMLCfofidWgnD64szsv584",
     authDomain: "flowsync-97ce0.firebaseapp.com",
@@ -49,7 +51,7 @@ function initTheme() {
 function renderHeatmap() {
     const pseudoMap = document.getElementById('pseudo-map');
     if (!pseudoMap) return;
-    pseudoMap.innerHTML = '';
+    pseudoMap.textContent = '';
 
     for (let key in zones) {
         let z = zones[key];
@@ -228,16 +230,19 @@ function syncToFirebase() {
 
 function loop() {
     syncToFirebase();
-    updateZones();
-    let actions = getActions();
-    applyFeedbackLoop(actions);
-    renderZones();
+    if (typeof updateZones !== 'undefined') updateZones();
+    let actions = typeof getActions !== 'undefined' ? getActions() : [];
+    if (typeof applyFeedbackLoop !== 'undefined') applyFeedbackLoop(actions);
 
     let globalAvg = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / Object.keys(zones).length;
-    if (typeof updateTelemetry !== 'undefined') updateTelemetry(Math.round(globalAvg));
-    if (typeof updateMapPolygons !== 'undefined') updateMapPolygons();
 
-    renderDecisions(actions);
+    // Use requestAnimationFrame for efficiency (batching DOM paints)
+    requestAnimationFrame(() => {
+        renderZones();
+        renderDecisions(actions);
+        if (typeof updateTelemetry !== 'undefined') updateTelemetry(Math.round(globalAvg));
+        if (typeof updateMapPolygons !== 'undefined') updateMapPolygons();
+    });
 }
 
 window.simulateEvent = function (type) {
