@@ -39,7 +39,6 @@ function initTheme() {
     });
 }
 
-// Map Fallback Removed
 
 function renderHeatmap() {
     const pseudoMap = document.getElementById('pseudo-map');
@@ -212,12 +211,10 @@ function loop() {
     applyFeedbackLoop(actions);
     renderZones();
 
-    // Wire up the new Wow Factor engines
     let globalAvg = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / Object.keys(zones).length;
     if (typeof updateTelemetry !== 'undefined') updateTelemetry(Math.round(globalAvg));
     if (typeof updateMapPolygons !== 'undefined') updateMapPolygons();
 
-    // Legacy renderHeatmap(); removed
     renderDecisions(actions);
 }
 
