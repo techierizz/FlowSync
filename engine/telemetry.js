@@ -1,10 +1,12 @@
 let densityChart;
+const maxHistory = 100; // Fixed deep history limit
+
 const chartData = {
-    labels: Array(20).fill(''),
+    labels: Array(maxHistory).fill(''),
     datasets: [
         {
             label: 'Global Density (%)',
-            data: Array(20).fill(25),
+            data: Array(maxHistory).fill(25),
             borderColor: '#10b981',
             backgroundColor: 'rgba(16, 185, 129, 0.2)',
             borderWidth: 3,
@@ -16,7 +18,7 @@ const chartData = {
         },
         {
             label: 'Warning Threshold',
-            data: Array(20).fill(45),
+            data: Array(maxHistory).fill(45),
             borderColor: 'rgba(245, 158, 11, 0.5)',
             borderWidth: 1.5,
             borderDash: [5, 5],
@@ -26,7 +28,7 @@ const chartData = {
         },
         {
             label: 'Critical Threshold',
-            data: Array(20).fill(75),
+            data: Array(maxHistory).fill(75),
             borderColor: 'rgba(239, 68, 68, 0.5)',
             borderWidth: 1.5,
             borderDash: [5, 5],
@@ -48,25 +50,32 @@ function initTelemetry() {
     gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
     chartData.datasets[0].backgroundColor = gradient;
 
+    // Lock the canvas to a massive static width for the seismograph effect
+    // This entirely prevents resize-stuttering while allowing horizontal scroll
+    const chartContainer = document.getElementById('chart-container');
+    chartContainer.style.width = '3500px';
+
     densityChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 600, // Smooth transition duration
+                easing: 'linear' // Constant speed flow for seismograph look
+            },
             scales: {
                 x: {
                     display: true,
                     grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 7 }
+                    ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 15 }
                 },
                 y: {
                     min: 0,
                     max: 100,
                     grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: {
-                        callback: function (value) { return value + '%' }
-                    }
+                    ticks: { callback: function (value) { return value + '%' } }
                 }
             },
             plugins: {
@@ -80,10 +89,15 @@ function initTelemetry() {
                     borderColor: 'rgba(255,255,255,0.1)',
                     borderWidth: 1
                 }
-            },
-            animation: { duration: 400 }
+            }
         }
     });
+
+    // Auto-scroll to the far right edge once on initialization
+    setTimeout(() => {
+        const chartViewport = document.getElementById('chart-viewport');
+        if (chartViewport) chartViewport.scrollLeft = chartViewport.scrollWidth;
+    }, 150);
 }
 
 function updateTelemetry(globalDensity) {
@@ -91,9 +105,15 @@ function updateTelemetry(globalDensity) {
 
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+    // Always shift the arrays like an ECG machine to keep size constant
+    chartData.labels.shift();
+    chartData.datasets[0].data.shift();
+    chartData.datasets[1].data.shift();
+    chartData.datasets[2].data.shift();
+
+    // Push new data directly to the right edge
     chartData.labels.push(time);
     chartData.datasets[0].data.push(globalDensity);
-
     chartData.datasets[1].data.push(45);
     chartData.datasets[2].data.push(75);
 
@@ -116,12 +136,6 @@ function updateTelemetry(globalDensity) {
     chartData.datasets[0].borderColor = colorHex;
     chartData.datasets[0].backgroundColor = dynamicGradient;
 
-    if (chartData.labels.length > 20) {
-        chartData.labels.shift();
-        chartData.datasets[0].data.shift();
-        chartData.datasets[1].data.shift();
-        chartData.datasets[2].data.shift();
-    }
-
-    densityChart.update('none');
+    // Use default smooth animations. The array shift triggers a gorgeous leftward flow.
+    densityChart.update();
 }
