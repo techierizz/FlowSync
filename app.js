@@ -35,7 +35,7 @@ function initTheme() {
     btn.addEventListener('click', () => {
         document.body.classList.toggle('light-theme');
         let isLight = document.body.classList.contains('light-theme');
-        
+
         btn.textContent = '';
         let icon = document.createElement('span');
         icon.className = 'material-symbols-outlined';
