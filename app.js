@@ -19,7 +19,7 @@ try {
 
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
-    initMapFallback();
+    if (typeof initTelemetry !== 'undefined') initTelemetry();
 
     let personaSelector = document.getElementById('persona-selector');
     if (personaSelector) {
@@ -215,6 +215,12 @@ function loop() {
     let actions = getActions();
     applyFeedbackLoop(actions);
     renderZones();
+    
+    // Wire up the new Wow Factor engines
+    let globalAvg = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / Object.keys(zones).length;
+    if (typeof updateTelemetry !== 'undefined') updateTelemetry(Math.round(globalAvg));
+    if (typeof updateMapPolygons !== 'undefined') updateMapPolygons();
+    
     renderHeatmap();
     renderDecisions(actions);
 }
