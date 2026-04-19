@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="FlowSync AI - Predictive Crowd Intelligence for large-scale venues." />
+    <meta name="description" content="FlowSync - Predictive Crowd Intelligence for large-scale venues." />
+    <link rel="icon" href="data:,">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://maps.googleapis.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com; script-src 'self' 'unsafe-inline' https://maps.googleapis.com;">
+        content="default-src 'self' https://maps.googleapis.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com; script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://www.gstatic.com https://*.firebaseio.com https://*.firebasedatabase.app; connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://www.gstatic.com;">
     <title>FlowSync | Predictive Crowd Intelligence</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +26,7 @@
     <header class="app-header">
         <div class="logo">
             <span class="material-symbols-outlined" aria-hidden="true">radar</span>
-            <h1>FlowSync AI</h1>
+            <h1>FlowSync</h1>
         </div>
         <nav aria-label="Main Navigation">
             <div class="status-indicator" role="status">
@@ -124,6 +125,9 @@
             <div id="decisions" class="decisions-list" aria-live="assertive"></div>
         </section>
     </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script src="data/mockData.js"></script>
     <script src="engine/crowd.js"></script>

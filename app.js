@@ -1,3 +1,22 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyA5qqN7uL1ErcMLCfofidWgnD64szsv584",
+    authDomain: "flowsync-97ce0.firebaseapp.com",
+    projectId: "flowsync-97ce0",
+    storageBucket: "flowsync-97ce0.firebasestorage.app",
+    messagingSenderId: "885697555847",
+    appId: "1:885697555847:web:c0e9d9496ec84b28ef3722",
+    databaseURL: "https://flowsync-97ce0-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+let database;
+try {
+    firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    console.log("Firebase successfully connected to Google Cloud.");
+} catch (e) {
+    console.error("Firebase initialization failed:", e);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMapFallback();
@@ -178,7 +197,16 @@ function renderDecisions(actions) {
 }
 
 function syncToFirebase() {
-    console.log("Syncing real-time crowd data to Firebase...");
+    if (database) {
+        database.ref('venue/zones').set(zones).catch(e => console.warn("Firebase push failed:", e));
+
+        let globalAvg = Object.values(zones).reduce((acc, z) => acc + z.density, 0) / Object.keys(zones).length;
+        database.ref('venue/status').set({
+            globalDensity: Math.round(globalAvg),
+            isRecovering: typeof isRecovering !== 'undefined' ? isRecovering : false,
+            lastUpdate: firebase.database.ServerValue.TIMESTAMP
+        }).catch(e => console.warn("Firebase status push failed:", e));
+    }
 }
 
 function loop() {
