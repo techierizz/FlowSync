@@ -54,62 +54,53 @@ function initTelemetry() {
     const chartContainer = document.getElementById('chart-container');
     chartContainer.style.width = '3500px';
 
+    const chartConfigOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 600,
+            easing: 'linear'
+        },
+        scales: {
+            x: {
+                display: true,
+                grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 15 }
+            },
+            y: {
+                min: 0,
+                max: 100,
+                grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                ticks: { callback: function (value) { return value + '%' } }
+            }
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                titleColor: '#f8fafc',
+                bodyColor: '#f8fafc',
+                borderColor: 'rgba(255,255,255,0.1)',
+                borderWidth: 1
+            }
+        }
+    };
+
     densityChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {
-                duration: 600,
-                easing: 'linear'
-            },
-            scales: {
-                x: {
-                    display: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 15 }
-                },
-                y: {
-                    min: 0,
-                    max: 100,
-                    grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { callback: function (value) { return value + '%' } }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                    titleColor: '#f8fafc',
-                    bodyColor: '#f8fafc',
-                    borderColor: 'rgba(255,255,255,0.1)',
-                    borderWidth: 1
-                }
-            }
-        }
+        options: chartConfigOptions
     });
 
-<<<<<<< HEAD
-=======
-    // Initialize the identical cloned chart for the fixed Y-Axis clipping mask
->>>>>>> 8831e8d53427a0a8d52b51fa929464ab5ee13935
     const ctxY = document.getElementById('yAxisChart').getContext('2d');
     yAxisChart = new Chart(ctxY, {
         type: 'line',
         data: chartData,
-<<<<<<< HEAD
-        options: densityChart.options
+        options: chartConfigOptions
     });
 
-=======
-        options: densityChart.options // Pixel-perfect replication
-    });
-
-    // Auto-scroll to the far right edge once on initialization
->>>>>>> 8831e8d53427a0a8d52b51fa929464ab5ee13935
     setTimeout(() => {
         const chartViewport = document.getElementById('chart-viewport');
         if (chartViewport) chartViewport.scrollLeft = chartViewport.scrollWidth;
