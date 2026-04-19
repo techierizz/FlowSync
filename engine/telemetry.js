@@ -1,5 +1,6 @@
 let densityChart;
-const maxHistory = 100; // Fixed deep history limit
+let yAxisChart;
+const maxHistory = 100;
 
 const chartData = {
     labels: Array(maxHistory).fill(''),
@@ -50,8 +51,6 @@ function initTelemetry() {
     gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
     chartData.datasets[0].backgroundColor = gradient;
 
-    // Lock the canvas to a massive static width for the seismograph effect
-    // This entirely prevents resize-stuttering while allowing horizontal scroll
     const chartContainer = document.getElementById('chart-container');
     chartContainer.style.width = '3500px';
 
@@ -62,8 +61,8 @@ function initTelemetry() {
             responsive: true,
             maintainAspectRatio: false,
             animation: {
-                duration: 600, // Smooth transition duration
-                easing: 'linear' // Constant speed flow for seismograph look
+                duration: 600,
+                easing: 'linear'
             },
             scales: {
                 x: {
@@ -93,7 +92,13 @@ function initTelemetry() {
         }
     });
 
-    // Auto-scroll to the far right edge once on initialization
+    const ctxY = document.getElementById('yAxisChart').getContext('2d');
+    yAxisChart = new Chart(ctxY, {
+        type: 'line',
+        data: chartData,
+        options: densityChart.options
+    });
+
     setTimeout(() => {
         const chartViewport = document.getElementById('chart-viewport');
         if (chartViewport) chartViewport.scrollLeft = chartViewport.scrollWidth;
@@ -105,13 +110,11 @@ function updateTelemetry(globalDensity) {
 
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // Always shift the arrays like an ECG machine to keep size constant
     chartData.labels.shift();
     chartData.datasets[0].data.shift();
     chartData.datasets[1].data.shift();
     chartData.datasets[2].data.shift();
 
-    // Push new data directly to the right edge
     chartData.labels.push(time);
     chartData.datasets[0].data.push(globalDensity);
     chartData.datasets[1].data.push(45);
@@ -136,6 +139,6 @@ function updateTelemetry(globalDensity) {
     chartData.datasets[0].borderColor = colorHex;
     chartData.datasets[0].backgroundColor = dynamicGradient;
 
-    // Use default smooth animations. The array shift triggers a gorgeous leftward flow.
     densityChart.update();
+    yAxisChart.update();
 }
