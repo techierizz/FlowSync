@@ -78,9 +78,18 @@
         <section class="panel glass map-panel" aria-labelledby="map-title">
             <h2 id="map-title"><span class="material-symbols-outlined" aria-hidden="true">map</span> Live Venue Map</h2>
             <div id="map-container" class="map-container" aria-label="Interactive venue map showing crowd density">
+                <!-- Tech Badge Overlay -->
+                <div class="map-tech-badge">
+                    <span class="material-symbols-outlined" style="font-size: 1rem;">radar</span> Live Spatial Intelligence
+                </div>
+                
                 <div id="google-map" aria-hidden="true"></div>
                 <!-- Interactive Heatmap Overlay -->
                 <div id="map-overlay" class="map-overlay"></div>
+            </div>
+            <!-- Tech Stack Explanation -->
+            <div class="map-footer-tech">
+                <strong>Powered by:</strong> Google Maps <span class="muted">(Spatial Intelligence)</span> &bull; Firebase <span class="muted">(Real-Time Sync)</span> &bull; Vision AI <span class="muted">(Crowd Detection)</span>
             </div>
         </section>
 
