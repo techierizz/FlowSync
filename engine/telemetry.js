@@ -92,13 +92,24 @@ function initTelemetry() {
         }
     });
 
+<<<<<<< HEAD
+=======
+    // Initialize the identical cloned chart for the fixed Y-Axis clipping mask
+>>>>>>> 8831e8d53427a0a8d52b51fa929464ab5ee13935
     const ctxY = document.getElementById('yAxisChart').getContext('2d');
     yAxisChart = new Chart(ctxY, {
         type: 'line',
         data: chartData,
+<<<<<<< HEAD
         options: densityChart.options
     });
 
+=======
+        options: densityChart.options // Pixel-perfect replication
+    });
+
+    // Auto-scroll to the far right edge once on initialization
+>>>>>>> 8831e8d53427a0a8d52b51fa929464ab5ee13935
     setTimeout(() => {
         const chartViewport = document.getElementById('chart-viewport');
         if (chartViewport) chartViewport.scrollLeft = chartViewport.scrollWidth;
