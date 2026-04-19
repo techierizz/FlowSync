@@ -138,7 +138,6 @@
 
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?callback=initRealMap&loading=async" async defer></script>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -150,6 +149,9 @@
     <script src="engine/coordination.js"></script>
     <script src="engine/telemetry.js"></script>
     <script src="engine/map.js"></script>
+
+    <!-- Load Google Maps API Last so initRealMap is defined -->
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initRealMap&loading=async" async defer></script>
 
     <script src="tests/engine.test.js"></script>
 
