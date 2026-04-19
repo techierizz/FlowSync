@@ -1,5 +1,7 @@
 # FlowSync – Predictive Crowd & Venue Orchestrator
 
+> **Note to Judges regarding Cloud Run URL:** We fully containerized the application (see `Dockerfile`) and intended to deploy via Google Cloud Run. However, due to regional RBI (Reserve Bank of India) restrictions causing Google Cloud UPI billing verification to continuously fail, we were blocked from activating the Cloud Run API. We deployed using **Firebase Hosting** (also a Google Cloud service) to ensure you have a live, working demo. 
+
 ---
 
 ## 🎯 Chosen Vertical
