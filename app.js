@@ -1,20 +1,13 @@
-/**
- * Main Application Controller
- * Handles UI binding, rendering loop, and event simulation.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMapFallback();
 
-    // User-Level Intelligence: Attach listener for persona change
     let personaSelector = document.getElementById('persona-selector');
     if (personaSelector) {
         personaSelector.addEventListener('change', renderDecisions);
     }
 
     loop();
-    // Use requestAnimationFrame in a real app, but setInterval is fine for periodic data fetches
     setInterval(loop, 2500);
 });
 
@@ -28,8 +21,6 @@ function initTheme() {
 }
 
 function initMapFallback() {
-    // Architecture Note: Google Maps API would be initialized here.
-    // We are using a robust CSS grid visualizer to represent the spatial intelligence.
     const map = document.getElementById('map-overlay');
     map.innerHTML = '<div class="pseudo-map" id="pseudo-map"></div>';
     renderHeatmap();
@@ -53,7 +44,6 @@ function renderHeatmap() {
         let node = document.createElement('div');
         node.className = 'heat-node';
 
-        // Dynamically calculate heat color (Green -> Yellow -> Red)
         let r = Math.min(255, (z.density / 100) * 255 * 2);
         let g = Math.min(255, ((100 - z.density) / 100) * 255 * 2);
         node.style.background = `rgba(${r}, ${g}, 0, 0.65)`;
@@ -92,8 +82,6 @@ function renderZones() {
         div.setAttribute('role', 'region');
         div.setAttribute('aria-label', `${z.name} status`);
 
-        // XSS Prevention: Use DOM manipulation instead of innerHTML where user data might exist.
-        // Here we use strict template literals as data is internally controlled.
         div.innerHTML = `
             <div class="zone-info">
                 <span class="zone-name">${z.name}</span>
@@ -108,7 +96,6 @@ function renderZones() {
     let globalAvg = totalDensity / Object.keys(zones).length;
     let globalDensityEl = document.getElementById('global-density');
 
-    // Trend Visualization (Recovery Feedback)
     let trend = "";
     if (lastGlobalDensity > 0) {
         if (globalAvg < lastGlobalDensity - 0.5) {
@@ -123,7 +110,6 @@ function renderZones() {
     globalDensityEl.innerHTML = Math.round(globalAvg) + '%' + trend;
     globalDensityEl.style.color = globalAvg > 75 ? 'var(--alert)' : (globalAvg > 45 ? '#f59e0b' : 'var(--secondary)');
 
-    // System Status Recovery Logic
     if (globalAvg > 70) {
         isRecovering = true;
     } else if (globalAvg < 50) {
@@ -139,7 +125,6 @@ function renderZones() {
             statusText.style.color = "var(--alert)";
             statusDot.style.background = "var(--alert)";
             statusDot.style.boxShadow = "0 0 10px var(--alert)";
-            // Add pulse effect to the dot if not already handled by css
         } else {
             statusText.innerText = "SYSTEM OPTIMAL";
             statusText.style.color = "var(--text-muted)";
@@ -154,11 +139,9 @@ function renderZones() {
 function renderDecisions(actions) {
     let div = document.getElementById("decisions");
 
-    // User-Level Intelligence Layer logic
     let personaSelector = document.getElementById('persona-selector');
     let currentPersona = personaSelector ? personaSelector.value : 'speed';
 
-    // Update UI text for persona description
     let desc = document.getElementById('persona-description');
     if (desc) {
         if (currentPersona === 'speed') desc.innerText = "Prioritizing minimum wait time.";
@@ -166,17 +149,14 @@ function renderDecisions(actions) {
         else if (currentPersona === 'accessibility') desc.innerText = "Prioritizing accessible zones.";
     }
 
-    // Get personalized best route based on user persona
     let best = getBestZone(currentPersona);
     document.getElementById('best-zone').innerText = best.name;
 
-    // Fallback if triggered by an Event Listener (like persona change) instead of the loop
     if (!actions || !Array.isArray(actions)) {
         actions = getActions();
     }
 
 
-    // Hash actions to prevent redundant DOM updates and allow CSS animations to play naturally
     let newHash = actions.map(a => a.msg).join('');
     if (div.dataset.hash === newHash) return;
     div.dataset.hash = newHash;
@@ -206,7 +186,6 @@ function loop() {
     renderDecisions(actions);
 }
 
-// Interactive Simulation Triggers
 window.simulateEvent = function (type) {
     if (type === 'match_start') {
         zones.gateA.density += 45;
@@ -222,27 +201,23 @@ window.simulateEvent = function (type) {
         zones.food.density = Math.max(0, zones.food.density - 40);
         zones.vip.density += 20;
     }
-    loop(); // Force immediate UI update
+    loop();
 };
 
-// High-Intensity Peak Surge Scenario
 window.triggerSurge = function () {
-    isRecovering = true; // Force system into explicit recovery mode
+    isRecovering = true;
 
-    // Visual effect on the Map Panel
     let mapContainer = document.getElementById('map-container');
     if (mapContainer) {
         mapContainer.classList.add('surge-active');
         setTimeout(() => mapContainer.classList.remove('surge-active'), 600);
     }
 
-    // Instantly destabilize the venue with extreme mass crowd injection
     for (let key in zones) {
         zones[key].density = Math.min(100, zones[key].density + 40 + Math.random() * 30);
         zones[key].inflow = Math.min(35, zones[key].inflow + 15 + Math.random() * 10);
         zones[key].queue = Math.min(60, zones[key].queue + 20 + Math.random() * 20);
     }
 
-    // Force immediate UI update to show chaos before AI starts mitigating
     loop();
 };

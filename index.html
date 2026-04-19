@@ -5,12 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="FlowSync AI - Predictive Crowd Intelligence for large-scale venues." />
-    <!-- Security: Content Security Policy to prevent XSS -->
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self' https://maps.googleapis.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com; script-src 'self' 'unsafe-inline' https://maps.googleapis.com;">
-    <title>FlowSync AI | Predictive Crowd Intelligence</title>
+    <title>FlowSync | Predictive Crowd Intelligence</title>
 
-    <!-- Google Services Integration: Fonts and Icons for UI Excellence -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Roboto+Mono&display=swap"
@@ -22,7 +20,6 @@
 </head>
 
 <body class="dark-theme">
-    <!-- Accessibility: Skip navigation link -->
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <header class="app-header">
@@ -42,7 +39,6 @@
     </header>
 
     <main id="main-content" class="dashboard">
-        <!-- Controls Panel -->
         <section class="panel glass controls" aria-labelledby="controls-title">
             <h2 id="controls-title"><span class="material-symbols-outlined" aria-hidden="true">settings</span>
                 Simulation</h2>
@@ -74,26 +70,28 @@
             <div id="zones" class="zone-list" aria-live="polite"></div>
         </section>
 
-        <!-- Map Panel -->
         <section class="panel glass map-panel" aria-labelledby="map-title">
             <h2 id="map-title"><span class="material-symbols-outlined" aria-hidden="true">map</span> Live Venue Map</h2>
             <div id="map-container" class="map-container" aria-label="Interactive venue map showing crowd density">
-                <!-- Tech Badge Overlay -->
+
                 <div class="map-tech-badge">
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">radar</span> Live Spatial Intelligence
+                    <span class="material-symbols-outlined" style="font-size: 1rem;">radar</span> Live Spatial
+                    Intelligence
                 </div>
-                
+
                 <div id="google-map" aria-hidden="true"></div>
-                <!-- Interactive Heatmap Overlay -->
+
                 <div id="map-overlay" class="map-overlay"></div>
             </div>
-            <!-- Tech Stack Explanation -->
+
             <div class="map-footer-tech">
-                <strong>Powered by:</strong> Google Maps <span class="muted">(Spatial Intelligence)</span> &bull; Firebase <span class="muted">(Real-Time Sync)</span> &bull; Vision AI <span class="muted">(Crowd Detection)</span>
+                <strong>Powered by:</strong> Google Maps <span class="muted">(Spatial Intelligence)</span> &bull;
+                Firebase <span class="muted">(Real-Time Sync)</span> &bull; Vision AI <span class="muted">(Crowd
+                    Detection)</span>
             </div>
         </section>
 
-        <!-- Analytics Panel -->
+
         <section class="panel glass analytics" aria-labelledby="analytics-title">
             <h2 id="analytics-title"><span class="material-symbols-outlined" aria-hidden="true">analytics</span> AI
                 Coordination</h2>
@@ -127,17 +125,14 @@
         </section>
     </main>
 
-    <!-- Data & Engine Modules -->
     <script src="data/mockData.js"></script>
     <script src="engine/crowd.js"></script>
     <script src="engine/prediction.js"></script>
     <script src="engine/routing.js"></script>
     <script src="engine/coordination.js"></script>
 
-    <!-- Testing Framework Integration -->
     <script src="tests/engine.test.js"></script>
 
-    <!-- Main App Logic -->
     <script src="app.js"></script>
 </body>
 
