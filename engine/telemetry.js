@@ -6,10 +6,10 @@ const chartData = {
             label: 'Global Density (%)',
             data: Array(20).fill(25),
             borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.2)', // Overridden by gradient in init
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
             borderWidth: 3,
             fill: true,
-            tension: 0.5, // Smoother bezier curves
+            tension: 0.5,
             pointRadius: 0,
             pointHoverRadius: 6,
             pointHitRadius: 15
@@ -43,7 +43,6 @@ function initTelemetry() {
     Chart.defaults.font.family = "'Inter', system-ui, -apple-system, sans-serif";
     Chart.defaults.color = "#94a3b8";
 
-    // Setup initial sleek gradient
     let gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(16, 185, 129, 0.6)');
     gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
@@ -95,7 +94,6 @@ function updateTelemetry(globalDensity) {
     chartData.labels.push(time);
     chartData.datasets[0].data.push(globalDensity);
 
-    // Shift threshold lines so they scroll along with the chart continuously
     chartData.datasets[1].data.push(45);
     chartData.datasets[2].data.push(75);
 
