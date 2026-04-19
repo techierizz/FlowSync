@@ -35,7 +35,13 @@ function initTheme() {
     btn.addEventListener('click', () => {
         document.body.classList.toggle('light-theme');
         let isLight = document.body.classList.contains('light-theme');
-        btn.innerHTML = isLight ? '<span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>' : '<span class="material-symbols-outlined" aria-hidden="true">light_mode</span>';
+        
+        btn.textContent = '';
+        let icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = isLight ? 'dark_mode' : 'light_mode';
+        btn.appendChild(icon);
     });
 }
 
@@ -79,7 +85,7 @@ let isRecovering = false;
 
 function renderZones() {
     let container = document.getElementById("zones");
-    container.innerHTML = "";
+    container.textContent = "";
 
     let totalDensity = 0;
 
@@ -96,13 +102,24 @@ function renderZones() {
         div.setAttribute('role', 'region');
         div.setAttribute('aria-label', `${z.name} status`);
 
-        div.innerHTML = `
-            <div class="zone-info">
-                <span class="zone-name">${z.name}</span>
-                <span class="zone-stats">Queue: ${z.queue} | Flow: ${z.inflow.toFixed(1)}/min</span>
-            </div>
-            <div class="zone-density" style="font-family: var(--font-mono)">${Math.round(z.density)}%</div>
-        `;
+        let infoDiv = document.createElement("div");
+        infoDiv.className = "zone-info";
+        let nameSpan = document.createElement("span");
+        nameSpan.className = "zone-name";
+        nameSpan.textContent = z.name;
+        let statsSpan = document.createElement("span");
+        statsSpan.className = "zone-stats";
+        statsSpan.textContent = `Queue: ${z.queue} | Flow: ${z.inflow.toFixed(1)}/min`;
+        infoDiv.appendChild(nameSpan);
+        infoDiv.appendChild(statsSpan);
+
+        let densityDiv = document.createElement("div");
+        densityDiv.className = "zone-density";
+        densityDiv.style.fontFamily = "var(--font-mono)";
+        densityDiv.textContent = `${Math.round(z.density)}%`;
+
+        div.appendChild(infoDiv);
+        div.appendChild(densityDiv);
 
         container.appendChild(div);
     }
@@ -110,18 +127,13 @@ function renderZones() {
     let globalAvg = totalDensity / Object.keys(zones).length;
     let globalDensityEl = document.getElementById('global-density');
 
-    let trend = "";
+    let trend = " ~";
     if (lastGlobalDensity > 0) {
-        if (globalAvg < lastGlobalDensity - 0.5) {
-            trend = " <span style='color: var(--secondary); font-size: 1.2rem; vertical-align: middle;'>▼</span>";
-        } else if (globalAvg > lastGlobalDensity + 0.5) {
-            trend = " <span style='color: var(--alert); font-size: 1.2rem; vertical-align: middle;'>▲</span>";
-        } else {
-            trend = " <span style='color: var(--text-muted); font-size: 1.2rem; vertical-align: middle;'>~</span>";
-        }
+        if (globalAvg < lastGlobalDensity - 0.5) trend = " ▼";
+        else if (globalAvg > lastGlobalDensity + 0.5) trend = " ▲";
     }
 
-    globalDensityEl.innerHTML = Math.round(globalAvg) + '%' + trend;
+    globalDensityEl.textContent = Math.round(globalAvg) + '%' + trend;
     globalDensityEl.style.color = globalAvg > 75 ? 'var(--alert)' : (globalAvg > 45 ? '#f59e0b' : 'var(--secondary)');
 
     if (globalAvg > 70) {
@@ -135,7 +147,8 @@ function renderZones() {
 
     if (statusText && statusDot) {
         if (isRecovering) {
-            statusText.innerHTML = "<strong>ACTIVE MITIGATION</strong>";
+            statusText.textContent = "ACTIVE MITIGATION";
+            statusText.style.fontWeight = "bold";
             statusText.style.color = "var(--alert)";
             statusDot.style.background = "var(--alert)";
             statusDot.style.boxShadow = "0 0 10px var(--alert)";
@@ -175,18 +188,27 @@ function renderDecisions(actions) {
     if (div.dataset.hash === newHash) return;
     div.dataset.hash = newHash;
 
-    div.innerHTML = "";
+    div.textContent = "";
     actions.forEach(a => {
         let p = document.createElement("div");
         p.className = `decision-item ${a.type.toLowerCase()}`;
 
-        let icon = 'info';
-        if (a.type === 'CRITICAL') icon = 'warning';
-        if (a.type === 'ALERT') icon = 'error';
-        if (a.type === 'WARN') icon = 'assignment_late';
-        if (a.type === 'INFO') icon = 'check_circle';
+        let iconStr = 'info';
+        if (a.type === 'CRITICAL') iconStr = 'warning';
+        if (a.type === 'ALERT') iconStr = 'error';
+        if (a.type === 'WARN') iconStr = 'assignment_late';
+        if (a.type === 'INFO') iconStr = 'check_circle';
 
-        p.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${icon}</span> <span>${a.msg}</span>`;
+        let iconEl = document.createElement("span");
+        iconEl.className = "material-symbols-outlined";
+        iconEl.setAttribute("aria-hidden", "true");
+        iconEl.textContent = iconStr;
+
+        let msgSpan = document.createElement("span");
+        msgSpan.textContent = a.msg;
+
+        p.appendChild(iconEl);
+        p.appendChild(msgSpan);
         div.appendChild(p);
     });
 }

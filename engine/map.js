@@ -47,9 +47,9 @@ const zoneCoords = {
 zoneCoords["Main Concourse"].labelPos.lat += 0.00035;
 zoneCoords["VIP Lounge"].labelPos.lat -= 0.00035;
 
-window.initRealMap = function () {
+window.initRealMap = async function () {
     const mapDiv = document.getElementById("google-map");
-    mapDiv.innerHTML = '';
+    mapDiv.textContent = '';
 
     googleMap = new google.maps.Map(mapDiv, {
         zoom: 17,
@@ -57,12 +57,15 @@ window.initRealMap = function () {
         mapTypeId: 'satellite',
         disableDefaultUI: true,
         tilt: 0,
+        mapId: 'DEMO_MAP_ID',
         styles: [
             { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
             { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
             { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] }
         ]
     });
+
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
     Object.keys(zones).forEach(zoneId => {
         let name = zones[zoneId].name;
@@ -77,17 +80,18 @@ window.initRealMap = function () {
                 map: googleMap
             });
 
-            let marker = new google.maps.Marker({
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'map-zone-label';
+            labelDiv.style.color = "#ffffff";
+            labelDiv.style.fontSize = "13px";
+            labelDiv.style.fontWeight = "800";
+            labelDiv.textContent = name;
+
+            let marker = new AdvancedMarkerElement({
                 position: zoneCoords[name].labelPos,
                 map: googleMap,
-                icon: { path: google.maps.SymbolPath.CIRCLE, scale: 0 },
-                label: {
-                    text: name,
-                    color: "#ffffff",
-                    fontSize: "13px",
-                    fontWeight: "800",
-                    className: "map-zone-label"
-                }
+                content: labelDiv,
+                title: name
             });
 
             zonePolygons[zoneId] = { polygon: poly, marker: marker };
@@ -120,7 +124,7 @@ function updateMapPolygons() {
 
 
 const mapScript = document.createElement('script');
-mapScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCdP7vyEZ7OVapMwHUebJgoAgAAK8KxrpA&callback=initRealMap&loading=async";
+mapScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCdP7vyEZ7OVapMwHUebJgoAgAAK8KxrpA&callback=initRealMap&loading=async&v=weekly";
 mapScript.async = true;
 mapScript.defer = true;
 document.head.appendChild(mapScript);
