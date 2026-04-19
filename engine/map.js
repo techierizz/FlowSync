@@ -1,53 +1,55 @@
 let googleMap;
 let zonePolygons = {};
 
-// We center around Madison Square Garden to demonstrate spatial intelligence
-const centerPoint = { lat: 40.7505, lng: -73.9934 };
+// Center on Wembley Stadium for a massive open-air visualization
+const centerPoint = { lat: 51.556021, lng: -0.279519 };
 
+// Helper function to draw mathematically precise curved stadium seating sections
+function getStadiumSlice(center, innerRadius, outerRadius, startAngle, endAngle) {
+    // Conversion factors for meters to degrees at London's latitude
+    const latMeters = 0.00000898;
+    const lngMeters = 0.00001445;
+    let paths = [];
+    
+    // Outer arc
+    for (let a = startAngle; a <= endAngle; a += 5) {
+        let rad = a * Math.PI / 180;
+        paths.push({
+            lat: center.lat + (outerRadius * Math.sin(rad) * latMeters),
+            lng: center.lng + (outerRadius * Math.cos(rad) * lngMeters)
+        });
+    }
+    // Inner arc (reverse)
+    for (let a = endAngle; a >= startAngle; a -= 5) {
+        let rad = a * Math.PI / 180;
+        paths.push({
+            lat: center.lat + (innerRadius * Math.sin(rad) * latMeters),
+            lng: center.lng + (innerRadius * Math.cos(rad) * lngMeters)
+        });
+    }
+    return paths;
+}
+
+// Generate the geographic zones based on the stadium's physical blueprint
 const zoneCoords = {
-    "North Gate": [
-        { lat: 40.7511, lng: -73.9942 },
-        { lat: 40.7511, lng: -73.9926 },
-        { lat: 40.7506, lng: -73.9926 },
-        { lat: 40.7506, lng: -73.9942 }
-    ],
-    "South Gate": [
-        { lat: 40.7504, lng: -73.9942 },
-        { lat: 40.7504, lng: -73.9926 },
-        { lat: 40.7499, lng: -73.9926 },
-        { lat: 40.7499, lng: -73.9942 }
-    ],
-    "East Concourse": [
-        { lat: 40.7509, lng: -73.9924 },
-        { lat: 40.7509, lng: -73.9918 },
-        { lat: 40.7501, lng: -73.9918 },
-        { lat: 40.7501, lng: -73.9924 }
-    ],
-    "West Concourse": [
-        { lat: 40.7509, lng: -73.9950 },
-        { lat: 40.7509, lng: -73.9944 },
-        { lat: 40.7501, lng: -73.9944 },
-        { lat: 40.7501, lng: -73.9950 }
-    ],
-    "VIP Lounge": [
-        { lat: 40.7506, lng: -73.9936 },
-        { lat: 40.7506, lng: -73.9932 },
-        { lat: 40.7504, lng: -73.9932 },
-        { lat: 40.7504, lng: -73.9936 }
-    ]
+    "North Gate A": getStadiumSlice(centerPoint, 60, 140, 45, 135),
+    "South Gate B": getStadiumSlice(centerPoint, 60, 140, 225, 315),
+    "Main Concourse": getStadiumSlice(centerPoint, 85, 140, 135, 225),  // West Upper
+    "Restrooms East": getStadiumSlice(centerPoint, 60, 140, -45, 45),   // East Stand
+    "VIP Lounge": getStadiumSlice(centerPoint, 60, 85, 150, 210),       // West Lower VIP
+    "Fan Store": getStadiumSlice(centerPoint, 150, 190, 290, 320)       // External Plaza South-East
 };
 
 window.initRealMap = function () {
-    // Clear out the pseudo-map fallback if it's there
     const mapDiv = document.getElementById("google-map");
     mapDiv.innerHTML = '';
 
-    // Create the actual Google Map instance
     googleMap = new google.maps.Map(mapDiv, {
-        zoom: 18,
+        zoom: 17, // Zoomed in just enough to see the whole stadium
         center: centerPoint,
         mapTypeId: 'satellite',
         disableDefaultUI: true,
+        tilt: 0, // Force top-down view for accurate geometry
         styles: [
             { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
             { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -55,17 +57,16 @@ window.initRealMap = function () {
         ]
     });
 
-    // Draw Google Maps Polygons for each structural zone
     Object.keys(zones).forEach(zoneId => {
         let name = zones[zoneId].name;
         if (zoneCoords[name]) {
             let poly = new google.maps.Polygon({
                 paths: zoneCoords[name],
                 strokeColor: "#10b981",
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
+                strokeOpacity: 0.9,
+                strokeWeight: 3,
                 fillColor: "#10b981",
-                fillOpacity: 0.35,
+                fillOpacity: 0.45,
                 map: googleMap
             });
             zonePolygons[zoneId] = poly;
