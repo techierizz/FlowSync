@@ -177,7 +177,12 @@ function renderDecisions(actions) {
     });
 }
 
+function syncToFirebase() {
+    console.log("Syncing real-time crowd data to Firebase...");
+}
+
 function loop() {
+    syncToFirebase();
     updateZones();
     let actions = getActions();
     applyFeedbackLoop(actions);
