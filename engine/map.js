@@ -37,11 +37,11 @@ const zoneCoords = {
     ]
 };
 
-window.initRealMap = function() {
+window.initRealMap = function () {
     // Clear out the pseudo-map fallback if it's there
     const mapDiv = document.getElementById("google-map");
     mapDiv.innerHTML = '';
-    
+
     // Create the actual Google Map instance
     googleMap = new google.maps.Map(mapDiv, {
         zoom: 18,
@@ -75,19 +75,19 @@ window.initRealMap = function() {
 
 function updateMapPolygons() {
     if (!googleMap) return;
-    
+
     Object.keys(zones).forEach(zoneId => {
         let poly = zonePolygons[zoneId];
         if (poly) {
             let density = zones[zoneId].density;
             let color = "#10b981"; // Green
-            
+
             if (density > 75) {
                 color = "#ef4444"; // Red
             } else if (density > 50) {
                 color = "#f59e0b"; // Yellow
             }
-            
+
             // Dynamically update the polygon shading based on real-time physics data
             poly.setOptions({
                 fillColor: color,
@@ -100,7 +100,7 @@ function updateMapPolygons() {
 // Dynamically inject the Google Maps API only AFTER this file has fully parsed
 // This guarantees initRealMap is defined before the API calls it.
 const mapScript = document.createElement('script');
-mapScript.src = "https://maps.googleapis.com/maps/api/js?callback=initRealMap&loading=async";
+mapScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCdP7vyEZ7OVapMwHUebJgoAgAAK8KxrpA&callback=initRealMap&loading=async";
 mapScript.async = true;
 mapScript.defer = true;
 document.head.appendChild(mapScript);
