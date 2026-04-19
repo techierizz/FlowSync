@@ -96,3 +96,11 @@ function updateMapPolygons() {
         }
     });
 }
+
+// Dynamically inject the Google Maps API only AFTER this file has fully parsed
+// This guarantees initRealMap is defined before the API calls it.
+const mapScript = document.createElement('script');
+mapScript.src = "https://maps.googleapis.com/maps/api/js?callback=initRealMap&loading=async";
+mapScript.async = true;
+mapScript.defer = true;
+document.head.appendChild(mapScript);
