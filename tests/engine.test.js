@@ -1,5 +1,5 @@
 (function runTests() {
-    console.log("[Test Suite] Starting FlowSync AI engine tests...");
+    console.log("[Test Suite] Starting FlowSync engine tests...");
 
     console.assert(typeof zones !== 'undefined', "Zones data store is missing");
     console.assert(Object.keys(zones).length > 0, "Zones data store is empty");
