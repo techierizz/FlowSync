@@ -9,3 +9,14 @@ function predictTimeInQueue(zone) {
     if (zone.queue <= 0) return 0;
     return Math.round((zone.queue * 1.5) / Math.max(1, zone.inflow));
 }
+
+function predictCongestionTime(zone) {
+    // Higher inflow + queue = faster congestion
+    let urgency = zone.inflow + (zone.queue / 5);
+
+    if (urgency > 20) return "1-2 minutes";
+    if (urgency > 12) return "3-5 minutes";
+    if (urgency > 6) return "5-8 minutes";
+
+    return "low risk";
+}

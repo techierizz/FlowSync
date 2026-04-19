@@ -27,9 +27,10 @@ function getActions() {
             let altKey = Object.keys(zones).find(k => zones[k].name === alt.name);
 
             if (alt.name !== z.name) {
+                let time = predictCongestionTime(z);
                 actions.push({
                     type: 'ALERT',
-                    msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${Math.round(z.density)}%, predicted congestion risk high)`,
+                    msg: `Reroute traffic from ${z.name} to ${alt.name}. (density: ${Math.round(z.density)}%, congestion expected in ${time})`,
                     actionType: 'REROUTE',
                     source: key,
                     target: altKey
@@ -39,7 +40,7 @@ function getActions() {
             let waitTime = predictTimeInQueue(z);
             actions.push({
                 type: 'WARN',
-                msg: `Deploy staff to ${z.name}. Est. wait: ~${waitTime}m.`,
+                msg: `Deploy staff to ${z.name}. Est. wait: ~${waitTime}m. (Congestion likely in ${time})`,
                 actionType: 'STAFF',
                 target: key
             });
