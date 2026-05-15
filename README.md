@@ -1,15 +1,5 @@
 # FlowSync – Predictive Crowd & Venue Orchestrator
 
-> **Note to Judges regarding Cloud Run URL:** We fully containerized the application (see `Dockerfile`) and intended to deploy via Google Cloud Run. However, due to regional RBI (Reserve Bank of India) restrictions causing Google Cloud UPI billing verification to continuously fail, we were blocked from activating the Cloud Run API. We deployed using **Firebase Hosting** (also a Google Cloud service) to ensure you have a live, working demo. 
-
----
-
-## 🎯 Chosen Vertical
-
-**Physical Event Experience**
-
-Design a solution that improves the physical event experience for attendees at large-scale sporting venues. The system should address challenges such as crowd movement, waiting times, and real-time coordination, while ensuring a seamless and enjoyable experience.
-
 ---
 
 ## 🧠 Approach and Logic
@@ -24,8 +14,6 @@ Simulates real-time crowd behavior using dynamic variables such as:
 * Inflow (incoming crowd rate)
 * Queue length
 
----
-
 ### 2. Predictive Analytics Engine
 
 Uses weighted scoring of:
@@ -36,8 +24,6 @@ Uses weighted scoring of:
 
 to detect **future congestion before it occurs**, enabling proactive decision-making.
 
----
-
 ### 3. Routing Engine (User-Level Intelligence)
 
 Provides personalized recommendations based on user personas:
@@ -45,8 +31,6 @@ Provides personalized recommendations based on user personas:
 * **Speed Mode** → fastest routes
 * **Comfort Mode** → avoids crowded areas
 * **Accessibility Mode** → minimizes physical strain and queue difficulty
-
----
 
 ### 4. Coordination Engine (System-Level Intelligence)
 
@@ -58,8 +42,6 @@ Analyzes global venue conditions and generates actions such as:
 
 Includes a **real-time feedback loop**, where system actions actively modify crowd conditions.
 
----
-
 ### 5. Time-Dimension Insight
 
 The system not only reacts to current conditions but also predicts:
@@ -68,8 +50,6 @@ The system not only reacts to current conditions but also predicts:
 
 This enables **proactive intervention instead of reactive control**.
 
----
-
 ### 6. Surge Simulation (Peak Surge Mode)
 
 Simulates high-pressure scenarios (e.g., halftime rush), allowing the system to:
@@ -77,8 +57,6 @@ Simulates high-pressure scenarios (e.g., halftime rush), allowing the system to:
 * Detect instability
 * Respond dynamically
 * Stabilize the environment
-
----
 
 ### 7. Google Services Integration (Designed Architecture)
 
